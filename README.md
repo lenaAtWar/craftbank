@@ -2,6 +2,7 @@
 
 DB default fields:
 - id
+- updated
 - created
 
 TODO:
@@ -32,7 +33,5 @@ Entities:
   - status
   - comment
 - Items
-
-DB:
-Add default fields:
-- updated
+  - mine_id
+  - name
