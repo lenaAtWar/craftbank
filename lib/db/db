@@ -112,8 +112,10 @@ function insert(table, data)
 
 	lastId = lastId + 1
 	data["id"] = lastId
-	data["updated"] = os.day()
-	data["created"] = os.day()
+	data["updated_day"] = os.day()
+	data["updated_time"] = os.time()
+	data["created_day"] = os.day()
+	data["created_time"] = os.time()
 	pathToRow = pathToTable .. "/" .. lastId
 	fs.makeDir(pathToRow)
 	for field, value in pairs(data) do
@@ -138,8 +140,12 @@ function update(path, values)
 		file.close()
 	end
 
-	file = fs.open(pathToRow .. "/updated", 'w')
+	file = fs.open(pathToRow .. "/updated_day", 'w')
 	file.write(os.day())
+	file.close()
+
+	file = fs.open(pathToRow .. "/updated_time", 'w')
+	file.write(os.time())
 	file.close()
 end
 
