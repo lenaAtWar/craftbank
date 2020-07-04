@@ -1,9 +1,19 @@
-function isValidToken(data)
-	if string.find(data["token"], "/") == nil then
-		return true
-	else
+function checkToken(tokenName, client_id)
+	if tokenName == nil then
 		return false
 	end
+
+	if string.find(tokenName, "/") ~= nil then
+		return false
+	end
+
+	tokenData = token.get(tokenName)
+	tokenData = json.fromString(tokenData)
+	if tokenData["client_id"] ~= client_id then
+		return false
+	end
+
+	return tokenData["user_id"]
 end
 
 function prepareResponse(status, message, data)
@@ -18,32 +28,58 @@ end
 errorResponse = prepareResponse("error", "", "")
 
 while true do
-	id, msg = rednet.receive(1000)
-	if id == c_.client_id then
+	client_id, msg, distance = rednet.receive(1000)
+	if msg ~= nil then
+		isSent = false
+		response = errorResponse
 		data = json.fromString(msg)
 		if data["action"] == "auth" then
 			shell.run(c_.path_app .. "auth")
-			if status == true then
-				response = prepareResponse("ok", token.set(userId, userId), "")
-			else
-				response = errorResponse
+			if userId ~= nil then
+				tokenName = "bank_auth_" .. userId .. "_" .. os.day() .. "_" .. os.time()
+				tokenData = {}
+				tokenData["client_id"] = client_id
+				tokenData["user_id"] = userId
+				tokenData = json.toString(tokenData)
+				token.set(tokenName, tokenData)
+
+				response = prepareResponse("ok", tokenName, "")
+				rednet.send(client_id, response)
+				isSent = true
 			end
 		elseif data["action"] == "balance" then
-			if isValidToken(data) then
-				userId = token.get(data["token"])
-				if userId ~= nil then
-					balance = db.selectVar("users/" .. userId .. "/balance")
-					response = prepareResponse("ok", balance, "")
-				else
-					response = errorResponse
-				end
-			else
-				response = errorResponse
+			userId = checkToken(data["token"], client_id)
+			if userId ~= false then
+				balance = db.selectVar("users/" .. userId .. "/balance")
+				response = prepareResponse("ok", balance, "")
+				rednet.send(client_id, response)
+				isSent = true
 			end
-		else
-			response = errorResponse
+		elseif data["action"] == "cash" and client_id == c_.terminal_id then
+			userId = checkToken(data["token"], client_id)
+			if userId ~= false then
+				balance = db.selectVar("users/" .. userId .. "/balance")
+				balance = balance + data["amount"]
+				upd = {}
+				upd["balance"] = balance
+				db.update("users/" .. userId, upd)
+
+				response = prepareResponse("ok", balance, "")
+				rednet.send(client_id, response)
+				isSent = true
+			end
+		elseif data["action"] == "exit" then
+			userId = checkToken(data["token"], client_id)
+			if userId ~= false then
+				token.delete(data["token"])
+				response = prepareResponse("ok", "", "")
+				rednet.send(client_id, response)
+				isSent = true
+			end
 		end
 
-		rednet.send(c_.client_id, response)
+		if isSent == false then
+			rednet.send(client_id, response)
+		end
 	end
 end

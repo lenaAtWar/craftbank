@@ -1,9 +1,8 @@
-status = false
+userId = nil
 id = db.find("users", "login", data["login"], false)
 if id ~= nil then
 	pass = db.selectVar("users/" .. id .. "/pass")
 	if pass == data["pass"] then
-		status = true
 		userId = id
 	end
 end

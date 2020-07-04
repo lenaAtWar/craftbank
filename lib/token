@@ -1,20 +1,18 @@
-function set(value, prefix)
-	token = os.day() .. os.time()
-	if #prefix > 0 then
-		token = prefix .. "_" .. token
-	end
-
-	path = c_token.path .. token
+function set(tokenName, value)
+	path = c_token.path .. tokenName
 	fun.file_put_contents(path, value)
-
-	return token
 end
 
-function get(token)
-	path = c_token.path .. token
+function get(tokenName)
+	path = c_token.path .. tokenName
 	if fs.exists(path) == false then
 		return nil
 	end
 
 	return fun.file_get_contents(path)
+end
+
+function delete(tokenName)
+	path = c_token.path .. tokenName
+	fs.delete(path)
 end

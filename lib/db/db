@@ -112,6 +112,8 @@ function insert(table, data)
 
 	lastId = lastId + 1
 	data["id"] = lastId
+	data["updated"] = os.day()
+	data["created"] = os.day()
 	pathToRow = pathToTable .. "/" .. lastId
 	fs.makeDir(pathToRow)
 	for field, value in pairs(data) do
@@ -125,12 +127,19 @@ function insert(table, data)
 end
 
 --[[
-example: db.update("users/1/balance", 0)
+example: db.update("users/1", ["login" => "admin", ...])
 ]]
-function update(path, value)
-	pathToField = c_db.path .. path
-	file = fs.open(pathToField, 'w')
-	file.write(value)
+function update(path, values)
+	pathToRow = c_db.path .. path
+	for field, value in pairs(values) do
+		pathToField = pathToRow .. "/" .. field
+		file = fs.open(pathToField, 'w')
+		file.write(value)
+		file.close()
+	end
+
+	file = fs.open(pathToRow .. "/updated", 'w')
+	file.write(os.day())
 	file.close()
 end
 

@@ -1,0 +1,4 @@
+commission = 5
+min_commission = 1
+title = "CraftBank"
+default_currency = 1

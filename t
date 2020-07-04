@@ -2,6 +2,7 @@
 os.loadAPI("/config/c_")
 os.loadAPI("/config/c_db")
 os.loadAPI("/config/c_token")
+os.loadAPI("/config/c_bank")
 
 -- LIB
 os.loadAPI("/lib/json")
