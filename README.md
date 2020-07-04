@@ -11,6 +11,7 @@ Entities:
   - login
   - pass
   - balance
+  - pin
 - Currency
   - name
   - is_active
