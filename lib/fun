@@ -1,0 +1,13 @@
+function file_get_contents(path)
+	file = fs.open(path, 'r')
+	text = file.readAll()
+	file.close()
+
+	return text
+end
+
+function file_put_contents(path, text)
+	file = fs.open(path, 'w')
+	file.write(text)
+	file.close()
+end

@@ -1,0 +1,5 @@
+client_id = 11 --7
+worder_id = 8
+modem_side = "top"
+path_data = "/data/"
+path_app = "/app/"

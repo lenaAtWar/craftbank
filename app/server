@@ -1,0 +1,49 @@
+function isValidToken(data)
+	if string.find(data["token"], "/") == nil then
+		return true
+	else
+		return false
+	end
+end
+
+function prepareResponse(status, message, data)
+	response = {}
+	response["status"] = status
+	response["message"] = message
+	response["data"] = data
+
+	return json.toString(response)
+end
+
+errorResponse = prepareResponse("error", "", "")
+
+while true do
+	id, msg = rednet.receive(1000)
+	if id == c_.client_id then
+		data = json.fromString(msg)
+		if data["action"] == "auth" then
+			shell.run(c_.path_app .. "auth")
+			if status == true then
+				response = prepareResponse("ok", token.set(userId, userId), "")
+			else
+				response = errorResponse
+			end
+		elseif data["action"] == "balance" then
+			if isValidToken(data) then
+				userId = token.get(data["token"])
+				if userId ~= nil then
+					balance = db.selectVar("users/" .. userId .. "/balance")
+					response = prepareResponse("ok", balance, "")
+				else
+					response = errorResponse
+				end
+			else
+				response = errorResponse
+			end
+		else
+			response = errorResponse
+		end
+
+		rednet.send(c_.client_id, response)
+	end
+end

@@ -1,0 +1,144 @@
+--[[
+example: db.selectVar("users/1/login")
+result: admin
+]]
+function selectVar(path)
+	path = c_db.path .. path
+	file = fs.open(path, 'r')
+	var = file.readAll()
+	file.close()
+
+	return var
+end
+
+--[[
+example: db.selectRow("users/1"])
+return:
+	[
+		id: 1
+		login: admin
+		pass: 123
+	]
+]]
+function selectRow(path)
+	path = c_db.path .. path
+	row = {}
+	fields = fs.list(path)
+	for n, field in pairs(fields) do
+		pathToFile = path .. "/" .. field
+		file = fs.open(pathToFile, 'r')
+		var = file.readAll()
+		file.close()
+		row[field] = var
+	end
+
+	return row
+end
+
+--[[
+example: db.selectRows("users")
+return:
+	[
+		1: [
+			id: 1
+			login: admin
+			pass: 123
+		]
+		2: ...
+	]
+]]
+function selectRows(table)
+	pathToTable = c_db.path .. table
+	result = {}
+	rows = fs.list(pathToTable)
+	for n, row in pairs(rows) do
+		result[row] = db.selectRow(table .. "/" .. row)
+	end
+
+	return result
+end
+
+--[[
+example: db.find("users", "login", "admin", false)
+return:
+	1 | nil
+	[1, 2, ...] (if get_rows == true)
+]]
+function find(table, field, value, get_rows)
+	pathToTable = c_db.path .. table
+	result = {}
+	rows = fs.list(pathToTable)
+	i = 1;
+	for n, row in pairs(rows) do
+		pathToField = pathToTable .. "/" .. row .. "/" .. field
+		file = fs.open(pathToField, 'r')
+		var = file.readAll()
+		file.close()
+		if var == value then
+			if get_rows == true then
+				result[i] = row
+				i = i + 1
+			else
+				return row
+			end
+		end
+	end
+
+	if #result > 0 then
+		return result
+	end
+
+	return nil
+end
+
+--[[
+example: db.create("users")
+]]
+function create(table)
+	fs.makeDir(c_db.path .. table)
+end
+
+--[[
+example: db.insert("users", ["login" => "admin", ...])
+return: id
+]]
+function insert(table, data)
+	pathToTable = c_db.path .. table
+	rows = fs.list(pathToTable)
+	lastId = 0
+	for n, row in pairs(rows) do
+		lastId = row
+	end
+
+	lastId = lastId + 1
+	data["id"] = lastId
+	pathToRow = pathToTable .. "/" .. lastId
+	fs.makeDir(pathToRow)
+	for field, value in pairs(data) do
+		pathToField = pathToRow .. "/" .. field
+		file = fs.open(pathToField, 'w')
+		file.write(value)
+		file.close()
+	end
+
+	return lastId
+end
+
+--[[
+example: db.update("users/1/balance", 0)
+]]
+function update(path, value)
+	pathToField = c_db.path .. path
+	file = fs.open(pathToField, 'w')
+	file.write(value)
+	file.close()
+end
+
+--[[
+example: db.delete("users")
+example: db.delete("users/1")
+]]
+function delete(path)
+	pathToTable = c_db.path .. path
+	fs.delete(pathToTable)
+end
