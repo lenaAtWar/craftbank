@@ -1,5 +1,11 @@
 # craftbank
 
+Bank actions:
+- authorization
+- get balance
+- cash
+- exit
+
 DB default fields:
 - id
 - updated_day
@@ -8,6 +14,13 @@ DB default fields:
 - created_time
 
 TODO:
+
+Bank actions:
+- transaction
+- deposit
+- create accounts
+- settings
+- average prices of items
 
 Entities:
 - User
