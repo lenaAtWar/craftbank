@@ -20,9 +20,9 @@ Entities:
   - item
   - currency
   - type [
-    1 = CASH
-    2 = BUY
-    3 = DEPOSIT
+    1 = CASH,
+    2 = BUY,
+    3 = DEPOSIT,
     4 = SHOP
   ]
   - amount
