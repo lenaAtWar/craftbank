@@ -2,8 +2,10 @@
 
 DB default fields:
 - id
-- updated
-- created
+- updated_day
+- updated_time
+- created_day
+- created_time
 
 TODO:
 
