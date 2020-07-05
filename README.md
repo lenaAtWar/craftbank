@@ -1,4 +1,7 @@
 # CraftBank
+Minecraft 1.4.7
+Mod: ComputerCraft
+Language: LUA
 
 # CraftBank Server
 
