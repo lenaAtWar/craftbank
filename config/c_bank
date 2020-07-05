@@ -1,4 +1,6 @@
-commission = 5
+commission = 0.05
 min_commission = 1
 title = "CraftBank"
 default_currency = 1
+bank_user_id = nil
+bank_user_login = "craftbank"

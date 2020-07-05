@@ -1,1 +1,11 @@
 rednet.open(c_.modem_side)
+
+-- bank account
+c_bank.bank_user_id = db.find("users", "login", c_bank.bank_user_login, false)
+if c_bank.bank_user_id == nil then
+	u = {}
+	u["login"] = c_bank.bank_user_login
+	u["pass"] = 123
+	u["balance"] = 0
+	c_bank.bank_user_id = db.insert("users", u)
+end

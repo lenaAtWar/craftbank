@@ -1,0 +1,55 @@
+transactionId = nil
+
+sellerId = db.find("users", "login", data["seller"], false)
+if sellerId ~= nil and sellerId ~= userId then
+	if 
+		type(data["amount"]) == "number" and
+		data["amount"] > 0 and
+		type(data["item_mine_id"]) == "string" and
+		type(data["number_of_item"]) == "number" and
+		data["number_of_item"] > 0
+	then
+		amount = data["amount"]
+		commission = amount * c_bank.commission
+		if commission < c_bank.min_commission then
+			commission = c_bank.min_commission
+		end
+
+		total = amount + commission
+		balance = tonumber(db.selectVar("users/" .. userId .. "/balance"))
+		if balance >= total then
+			transaction = {}
+			transaction["type"] = 2 	-- BUY
+			transaction["currency"] = c_bank.default_currency
+			transaction["status"] = 1	-- SUCCESS
+			transaction["buyer"] = userId
+			transaction["seller"] = sellerId
+			transaction["amount"] = data["amount"]
+			transaction["commission"] = commission
+			transaction["item_mine_id"] = data["item_mine_id"]
+			transaction["number_of_item"] = data["number_of_item"]
+			transaction_id = db.insert("transaction", transaction)
+
+			if type(transaction_id) == "number" then
+				-- withdrawal
+				u = {}
+				u["balance"] = balance - total
+				db.update("users/" .. userId, u)
+
+				-- deposit
+				sellerBalance = tonumber(db.selectVar("users/" .. sellerId .. "/balance"))
+				u = {}
+				u["balance"] = sellerBalance + amount
+				db.update("users/" .. sellerId, u)
+
+				-- commission
+				bankBalance = tonumber(db.selectVar("users/" .. c_bank.bank_user_id .. "/balance"))
+				u = {}
+				u["balance"] = bankBalance + commission
+				db.update("users/" .. c_bank.bank_user_id, u)
+
+				transactionId = transaction_id
+			end
+		end
+	end
+end

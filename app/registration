@@ -1,0 +1,11 @@
+userId = nil
+id = db.find("users", "login", data["login"], false)
+if id == nil then
+	if #data["pass"] >= 4 then
+		user = {}
+		user["login"] = data["login"]
+		user["pass"] = data["pass"]
+		user["balance"] = 0
+		userId = db.insert("users", user)
+	end
+end

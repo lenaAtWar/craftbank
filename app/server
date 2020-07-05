@@ -47,6 +47,13 @@ while true do
 				rednet.send(client_id, response)
 				isSent = true
 			end
+		elseif data["action"] == "reg" then
+			shell.run(c_.path_app .. "registration")
+			if userId ~= nil then
+				response = prepareResponse("ok", "", "")
+				rednet.send(client_id, response)
+				isSent = true
+			end
 		elseif data["action"] == "balance" then
 			userId = checkToken(data["token"], client_id)
 			if userId ~= false then
@@ -58,7 +65,7 @@ while true do
 		elseif data["action"] == "cash" and client_id == c_.terminal_id then
 			userId = checkToken(data["token"], client_id)
 			if userId ~= false then
-				balance = db.selectVar("users/" .. userId .. "/balance")
+				balance = tonumber(db.selectVar("users/" .. userId .. "/balance"))
 				balance = balance + data["amount"]
 				upd = {}
 				upd["balance"] = balance
@@ -67,6 +74,16 @@ while true do
 				response = prepareResponse("ok", balance, "")
 				rednet.send(client_id, response)
 				isSent = true
+			end
+		elseif data["action"] == "buy" then
+			userId = checkToken(data["token"], client_id)
+			if userId ~= false then
+				shell.run(c_.path_app .. "buy")
+				if transactionId ~= nil then
+					response = prepareResponse("ok", "", "")
+					rednet.send(client_id, response)
+					isSent = true
+				end
 			end
 		elseif data["action"] == "exit" then
 			userId = checkToken(data["token"], client_id)
