@@ -34,7 +34,7 @@ Entities:
 - Transaction
   - buyer
   - seller
-  - item
+  - item_mine_id
   - currency
   - type [
     1 = CASH,
