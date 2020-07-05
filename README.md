@@ -2,8 +2,10 @@
 
 Bank actions:
 - authorization
+- registration
 - get balance
 - cash
+- transaction
 - exit
 
 DB default fields:
@@ -16,9 +18,7 @@ DB default fields:
 TODO:
 
 Bank actions:
-- transaction
 - deposit
-- create accounts
 - settings
 - average prices of items
 
@@ -40,7 +40,8 @@ Entities:
     1 = CASH,
     2 = BUY,
     3 = DEPOSIT,
-    4 = SHOP
+    4 = SHOP,
+    5 = ONLINE_SHOP
   ]
   - amount
   - commission
