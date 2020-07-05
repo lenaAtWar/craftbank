@@ -46,7 +46,11 @@ Entities:
   - amount
   - commission
   - number_of_item
-  - status
+  - status [
+    1 = SUCCESS,
+    2 = ERROR,
+    3 = REFUND
+  ]
   - comment
 - Items
   - mine_id
