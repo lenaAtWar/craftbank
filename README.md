@@ -22,7 +22,7 @@ DB:
   - created_day
   - created_time
 
-TODO:
+# TODO:
 
 Bank actions:
 - deposit
