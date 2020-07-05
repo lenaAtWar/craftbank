@@ -1,6 +1,8 @@
-# craftbank
+# CraftBank
 
-Bank actions:
+# CraftBank Server
+
+Actions:
 - authorization
 - registration
 - get balance
@@ -8,12 +10,17 @@ Bank actions:
 - transaction
 - exit
 
-DB default fields:
-- id
-- updated_day
-- updated_time
-- created_day
-- created_time
+DB:
+- tables:
+  - users
+  - currency
+  - transaction
+- default fields:
+  - id
+  - updated_day
+  - updated_time
+  - created_day
+  - created_time
 
 TODO:
 
@@ -55,3 +62,5 @@ Entities:
 - Items
   - mine_id
   - name
+  
+# END CraftBank Server
