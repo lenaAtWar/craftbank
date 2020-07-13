@@ -1,0 +1,11 @@
+-- CONFIG
+os.loadAPI("/config/c_")
+
+-- LIB
+os.loadAPI("/lib/json")
+
+-- SETUP
+shell.run(c_.path_app .. "setup")
+
+-- SERVER
+shell.run(c_.path_app .. "worker")

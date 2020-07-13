@@ -1,0 +1,19 @@
+while true do
+	client_id, msg, distance = rednet.receive(1000)
+	if client_id == c_.server_id then
+		numberOfItems = 0
+		data = json.fromString(msg)
+		if data["action"] == "count" then
+			for i=1, 16 do
+				numberOfItems = numberOfItems + turtle.getItemCount(i)
+				turtle.select(i)
+				turtle.dropDown()
+			end
+		end
+
+		response = {}
+		response["count"] = numberOfItems
+		response = json.toString(response)
+		rednet.send(client_id, response)
+	end
+end
