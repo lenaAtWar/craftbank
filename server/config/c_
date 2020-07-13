@@ -1,5 +1,5 @@
-terminal_id = 11 --7
-worker_id = 11 --8
+terminal_id = 7
+worker_id = 8
 modem_side = "top"
 path_data = "/data/"
 path_app = "/app/"

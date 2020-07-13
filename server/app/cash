@@ -1,0 +1,26 @@
+status = false
+msg = {}
+msg["action"] = "count"
+msg = json.toString(msg)
+rednet.send(c_.worker_id, msg)
+i = 0
+while true do
+	if i > 10 then
+		break
+	end
+
+	wId, wMsg, wD = rednet.receive(5)
+	if wId = c_.worker_id then
+		wData = json.fromString(wMsg)
+		balance = tonumber(db.selectVar("users/" .. userId .. "/balance"))
+		balance = balance + wData["count"]
+		upd = {}
+		upd["balance"] = balance
+		db.update("users/" .. userId, upd)
+		status = true
+
+		break
+	end
+
+	i = i + 1
+end
