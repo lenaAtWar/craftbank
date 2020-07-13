@@ -1,0 +1,5 @@
+info = {}
+info["commission"] = c_bank.commission
+info["min_commission"] = c_bank.min_commission
+info["title"] = c_bank.title
+info = json.toString(info)
