@@ -2,6 +2,8 @@ transactionId = nil
 
 sellerId = db.find("users", "login", data["seller"], false)
 if sellerId ~= nil and sellerId ~= userId then
+	data["amount"] = tonumber(data["amount"])
+	data["number_of_item"] = tonumber(data["number_of_item"])
 	if 
 		type(data["amount"]) == "number" and
 		data["amount"] > 0 and

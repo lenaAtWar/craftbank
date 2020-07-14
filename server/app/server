@@ -65,7 +65,7 @@ while true do
 		elseif data["action"] == "cash" and client_id == c_.terminal_id then
 			userId = checkToken(data["token"], client_id)
 			if userId ~= false then
-				shell.run(c_.path_app .. "buy")
+				shell.run(c_.path_app .. "cash")
 				if status == true then
 					response = prepareResponse("ok", balance, "")
 					rednet.send(client_id, response)
