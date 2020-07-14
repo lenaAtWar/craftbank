@@ -12,6 +12,19 @@ for i=1, 10 do
 		upd = {}
 		upd["balance"] = balance
 		db.update("users/" .. userId, upd)
+
+		transaction = {}
+		transaction["type"] = 1 	-- CASH
+		transaction["currency"] = c_bank.default_currency
+		transaction["status"] = 1	-- SUCCESS
+		transaction["buyer"] = userId
+		transaction["seller"] = userId
+		transaction["amount"] = wData["count"]
+		transaction["commission"] = 0
+		transaction["item_mine_id"] = ""
+		transaction["number_of_item"] = 0
+		transaction_id = db.insert("transaction", transaction)
+
 		status = true
 
 		break

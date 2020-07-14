@@ -9,3 +9,9 @@ if c_bank.bank_user_id == nil then
 	u["balance"] = 0
 	c_bank.bank_user_id = db.insert("users", u)
 end
+
+-- clear tokens
+tokens = fs.list(c_token.path)
+for n, token in pairs(tokens) do
+	fs.delete(c_token.path .. token)
+end

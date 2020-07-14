@@ -87,6 +87,22 @@ while true do
 			response = prepareResponse("ok", info, "")
 			rednet.send(client_id, response)
 			isSent = true
+		elseif data["action"] == "transactions" then
+			userId = checkToken(data["token"], client_id)
+			if userId ~= false then
+				transactions = db.find("transaction", "seller", userId, true)
+				if transactions ~= nil then
+					sendData = {}
+					for key, value in pairs(transactions) do
+						sendData[key] = db.selectRow("transaction/" .. key)
+						sendData[key]["buyer"] = db.selectVar("users/" .. sendData[key]["buyer"] .. "/login")
+					end
+
+					response = prepareResponse("ok", "", sendData)
+					rednet.send(client_id, response)
+					isSent = true
+				end
+			end
 		elseif data["action"] == "exit" then
 			userId = checkToken(data["token"], client_id)
 			if userId ~= false then

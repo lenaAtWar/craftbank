@@ -12,7 +12,7 @@ function selectVar(path)
 end
 
 --[[
-example: db.selectRow("users/1"])
+example: db.selectRow("users/1")
 return:
 	[
 		id: 1
