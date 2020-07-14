@@ -1,0 +1,21 @@
+rednet.open(c_.modem_side)
+
+min_commission = 0
+commission = 0
+title = "Title"
+
+data = {}
+data["action"] = "info"
+data = json.toString(data)
+while true do
+	rednet.send(c_.server_id, data)
+	id, info, d = rednet.receive(5)
+	if id == c_.server_id then
+		info = json.fromString(info)["message"]
+		min_commission = info["min_commission"]
+		commission = info["commission"]
+		title = info["title"]
+
+		break
+	end
+end

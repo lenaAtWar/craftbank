@@ -1,0 +1,14 @@
+-- CONFIG
+os.loadAPI("/config/c_")
+os.loadAPI("/config/c_color")
+
+-- LIB
+os.loadAPI("/lib/json")
+os.loadAPI("/lib/menu")
+os.loadAPI("/lib/fun")
+
+-- SETUP
+shell.run(c_.path_app .. "setup")
+
+-- SERVER
+shell.run(c_.path_app .. "client")

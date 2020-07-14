@@ -1,0 +1,215 @@
+token = nil
+menuListFirst = {}
+menuListFirst[1] = "Log in"
+menuListFirst[2] = "Register"
+
+menuListAuth = {}
+menuListAuth[3] = "Balance"
+menuListAuth[4] = "Cash"
+menuListAuth[5] = "Buy"
+menuListAuth[6] = "Exit"
+
+menuList = menuListFirst
+
+while true do
+	term.clear()
+
+	term.setCursorPos(2, 2)
+	io.write(title)
+	term.setCursorPos(2, 3)
+	io.write("Commission for buy: " .. (commission * 100) .. "% (min: " .. min_commission .. "$)")
+
+	action = menu.menu(menuList, 2, 9, "[ ", " ]")
+	fun.clearMonik(9, 19)
+	if action == 1 then
+		term.setCursorPos(2, 9)
+		io.write("Login: ")
+		term.setCursorPos(9, 9)
+		login = read()
+
+		term.setCursorPos(2, 10)
+		io.write("Pass: ")
+		term.setCursorPos(8, 10)
+		pass = read("*")
+
+		data = {}
+		data["action"] = "auth"
+		data["login"] = login
+		data["pass"] = pass
+		data = json.toString(data)
+		for i=1, 5 do
+			rednet.send(c_.server_id, data)
+			id, response, d = rednet.receive(5)
+			if id == c_.server_id then
+				response = json.fromString(response)
+				if response["status"] == "ok" then
+					token = response["message"]
+					menuList = menuListAuth
+				else
+					term.setCursorPos(2, 12)
+					term.setTextColor(c_color.red)
+					io.write("Error")
+					term.setTextColor(c_color.white)
+					local event, button = os.pullEvent("key")
+				end
+
+				break
+			end
+		end
+	elseif action == 2 then
+		term.setCursorPos(2, 9)
+		io.write("Login: ")
+		term.setCursorPos(9, 9)
+		login = read()
+
+		term.setCursorPos(2, 10)
+		io.write("Pass: ")
+		term.setCursorPos(8, 10)
+		pass = read("*")
+
+		data = {}
+		data["action"] = "reg"
+		data["login"] = login
+		data["pass"] = pass
+		data = json.toString(data)
+		for i=1, 5 do
+			rednet.send(c_.server_id, data)
+			id, response, d = rednet.receive(5)
+			if id == c_.server_id then
+				response = json.fromString(response)
+				term.setCursorPos(2, 12)
+				if response["status"] == "ok" then
+					term.setTextColor(c_color.lime)
+					io.write("Success")
+					local event, button = os.pullEvent("key")
+				else
+					term.setTextColor(c_color.red)
+					io.write("Error")
+					local event, button = os.pullEvent("key")
+				end
+
+				term.setTextColor(c_color.white)
+
+				break
+			end
+		end
+	elseif action == 3 then
+		data = {}
+		data["action"] = "balance"
+		data["token"] = token
+		data = json.toString(data)
+		for i=1, 5 do
+			rednet.send(c_.server_id, data)
+			id, response, d = rednet.receive(5)
+			if id == c_.server_id then
+				response = json.fromString(response)
+				term.setCursorPos(2, 9)
+				if response["status"] == "ok" then
+					term.setTextColor(c_color.lime)
+					io.write("Balance: " ..  response["message"])
+					local event, button = os.pullEvent("key")
+				else
+					term.setTextColor(c_color.red)
+					io.write("Error")
+					local event, button = os.pullEvent("key")
+				end
+
+				term.setTextColor(c_color.white)
+
+				break
+			end
+		end
+	elseif action == 4 then
+		data = {}
+		data["action"] = "cash"
+		data["token"] = token
+		data = json.toString(data)
+		for i=1, 5 do
+			rednet.send(c_.server_id, data)
+			id, response, d = rednet.receive(5)
+			if id == c_.server_id then
+				response = json.fromString(response)
+				term.setCursorPos(2, 9)
+				if response["status"] == "ok" then
+					term.setTextColor(c_color.lime)
+					io.write("Balance: " ..  response["message"])
+					local event, button = os.pullEvent("key")
+				else
+					term.setTextColor(c_color.red)
+					io.write("Error")
+					local event, button = os.pullEvent("key")
+				end
+
+				term.setTextColor(c_color.white)
+
+				break
+			end
+		end
+	elseif action == 5 then
+		data = {}
+		data["action"] = "buy"
+		data["token"] = token
+
+		term.setCursorPos(2, 9)
+		io.write("Seller (login): ")
+		term.setCursorPos(18, 9)
+		data["seller"] = read()
+
+		term.setCursorPos(2, 10)
+		io.write("Amount: ")
+		term.setCursorPos(10, 10)
+		data["amount"] = tonumber(read())
+
+		com = data["amount"] * commission
+		if com < min_commission then
+			com = min_commission
+		end
+
+		total = data["amount"] + com
+		term.setCursorPos(3, 11)
+		io.write("commission: " .. com)
+		term.setCursorPos(3, 12)
+		io.write("total: " .. total)
+
+
+		term.setCursorPos(2, 13)
+		io.write("Item mine ID: ")
+		term.setCursorPos(16, 13)
+		data["item_mine_id"] = read()
+
+		term.setCursorPos(2, 14)
+		io.write("Number of items: ")
+		term.setCursorPos(19, 14)
+		data["number_of_item"] = read()
+
+		data = json.toString(data)
+		for i=1, 5 do
+			rednet.send(c_.server_id, data)
+			id, response, d = rednet.receive(5)
+			if id == c_.server_id then
+				response = json.fromString(response)
+				term.setCursorPos(2, 16)
+				if response["status"] == "ok" then
+					term.setTextColor(c_color.lime)
+					io.write("Success")
+					local event, button = os.pullEvent("key")
+				else
+					term.setTextColor(c_color.red)
+					io.write("Error")
+					local event, button = os.pullEvent("key")
+				end
+
+				term.setTextColor(c_color.white)
+
+				break
+			end
+		end
+	elseif action == 6 then
+		data = {}
+		data["action"] = "exit"
+		data["token"] = token
+		data = json.toString(data)
+		rednet.send(c_.server_id, data)
+		menuList = menuListFirst
+	end
+end

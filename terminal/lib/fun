@@ -1,0 +1,6 @@
+function clearMonik(yStart, yEnd)
+	for y=yStart, yEnd do
+		term.setCursorPos(1, y)
+		term.clearLine()
+	end
+end

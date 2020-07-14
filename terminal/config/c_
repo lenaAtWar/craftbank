@@ -1,0 +1,3 @@
+server_id = 9
+modem_side = "back"
+path_app = "/app/"
