@@ -8,6 +8,7 @@ menuListAuth[3] = "Balance"
 menuListAuth[4] = "Cash"
 menuListAuth[5] = "Buy"
 menuListAuth[6] = "Exit"
+menuListAuth[7] = "Transactions"
 
 menuList = menuListFirst
 
@@ -215,5 +216,69 @@ while true do
 		data = json.toString(data)
 		rednet.send(c_.server_id, data)
 		menuList = menuListFirst
+	elseif action == 7 then
+		data = {}
+		data["action"] = "transactions"
+		data["token"] = token
+		data = json.toString(data)
+		for i=1, 5 do
+			rednet.send(c_.server_id, data)
+			id, response, d = rednet.receive(5)
+			if id == c_.server_id then
+				response = json.fromString(response)
+				term.setCursorPos(2, 9)
+				if response["status"] == "ok" then
+					io.write("ID   |     TYPE      |   BUYER    |  AMOUNT")
+					i = 10
+					transactions = response["data"]
+
+					for key, value in pairs(transactions) do
+						term.setCursorPos(2, i)
+						io.write(string.gsub(value["id"], ".0", ""))
+
+						term.setCursorPos(6, i)
+						io.write(" | ")
+
+						term.setCursorPos(9, i)
+						value["type"] = tonumber(value["type"])
+						if value["type"] == 1 then
+							io.write("CASH")
+						elseif value["type"] == 2 then
+							io.write("BUY")
+						elseif value["type"] == 3 then
+							io.write("DEPOSIT")
+						elseif value["type"] == 4 then
+							io.write("SHOP")
+						elseif value["type"] == 5 then
+							io.write("ONLINE_SHOP ")
+						end
+
+						term.setCursorPos(22, i)
+						io.write(" | ")
+
+						term.setCursorPos(25, i)
+						io.write(value["buyer"])
+
+						term.setCursorPos(35, i)
+						io.write(" | ")
+
+						term.setCursorPos(38, i)
+						io.write(value["amount"])
+
+
+						i = i + 1
+					end
+					local event, button = os.pullEvent("key")
+				else
+					term.setTextColor(c_color.red)
+					io.write("Error")
+					local event, button = os.pullEvent("key")
+				end
+
+				term.setTextColor(c_color.white)
+
+				break
+			end
+		end
 	end
 end
