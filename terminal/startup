@@ -1,3 +1,6 @@
+-- SECURITY
+os.pullEvent = os.pullEventRaw
+
 -- CONFIG
 os.loadAPI("/config/c_")
 os.loadAPI("/config/c_color")
