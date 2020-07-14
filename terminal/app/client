@@ -160,6 +160,10 @@ while true do
 		term.setCursorPos(10, 10)
 		data["amount"] = tonumber(read())
 
+		if data["amount"] == nil then
+			os.reboot()
+		end
+
 		com = data["amount"] * commission
 		if com < min_commission then
 			com = min_commission
