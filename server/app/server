@@ -103,6 +103,16 @@ while true do
 					isSent = true
 				end
 			end
+		elseif data["action"] == "password" then
+			userId = checkToken(data["token"], client_id)
+			if userId ~= false then
+				shell.run(c_.path_app .. "password")
+				if status == true then
+					response = prepareResponse("ok", "", "")
+					rednet.send(client_id, response)
+					isSent = true
+				end
+			end
 		elseif data["action"] == "exit" then
 			userId = checkToken(data["token"], client_id)
 			if userId ~= false then
