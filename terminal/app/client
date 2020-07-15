@@ -9,6 +9,7 @@ menuListAuth[4] = "Cash"
 menuListAuth[5] = "Buy"
 menuListAuth[6] = "Exit"
 menuListAuth[7] = "Transactions"
+menuListAuth[8] = "Password"
 
 menuList = menuListFirst
 
@@ -272,6 +273,48 @@ while true do
 
 						i = i + 1
 					end
+					local event, button = os.pullEvent("key")
+				else
+					term.setTextColor(c_color.red)
+					io.write("Error")
+					local event, button = os.pullEvent("key")
+				end
+
+				term.setTextColor(c_color.white)
+
+				break
+			end
+		end
+	elseif action == 8 then
+		data = {}
+		data["action"] = "password"
+		data["token"] = token
+
+		term.setCursorPos(2, 9)
+		io.write("Old password: ")
+		term.setCursorPos(16, 9)
+		data["old_pass"] = read("*")
+
+		term.setCursorPos(2, 10)
+		io.write("New password: ")
+		term.setCursorPos(16, 10)
+		data["pass_new"] = read("*")
+
+		term.setCursorPos(2, 11)
+		io.write("Repeat password: ")
+		term.setCursorPos(19, 11)
+		data["pass_repeat"] = read("*")
+
+		data = json.toString(data)
+		for i=1, 5 do
+			rednet.send(c_.server_id, data)
+			id, response, d = rednet.receive(5)
+			if id == c_.server_id then
+				response = json.fromString(response)
+				term.setCursorPos(2, 13)
+				if response["status"] == "ok" then
+					term.setTextColor(c_color.lime)
+					io.write("Success")
 					local event, button = os.pullEvent("key")
 				else
 					term.setTextColor(c_color.red)
