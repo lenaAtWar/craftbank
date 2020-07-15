@@ -230,8 +230,8 @@ while true do
 				if response["status"] == "ok" then
 					io.write("ID   |     TYPE      |   BUYER    |  AMOUNT")
 					i = 10
-					transactions = response["data"]
-
+					transactions = fun.array_reverse(response["data"])
+					j = 0
 					for key, value in pairs(transactions) do
 						term.setCursorPos(2, i)
 						io.write(string.gsub(value["id"], ".0", ""))
@@ -265,6 +265,10 @@ while true do
 						term.setCursorPos(38, i)
 						io.write(value["amount"])
 
+						j = j + 1
+						if j >= 10 then
+							break
+						end
 
 						i = i + 1
 					end
