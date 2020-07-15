@@ -8,11 +8,13 @@ Language: LUA
 # CraftBank Server
 
 Actions:
-- authorization
+- log in
 - registration
 - get balance
 - cash
-- transaction
+- show last 10 transactions
+- buy
+- change password
 - exit
 
 DB:
@@ -31,8 +33,6 @@ DB:
 
 Bank actions:
 - deposit
-- settings
-- average prices of items
 
 Entities:
 - User
@@ -69,3 +69,23 @@ Entities:
   - name
   
 # END CraftBank Server
+
+# OTHERS
+
+- OS
+- dns
+- http
+- online shop
+- offline shop
+- amazon (storage & delivery)
+- 
+
+Apps:
+- http-server
+- browser
+- appstore
+- prices of items
+- exchange
+- mail
+- steam
+  - games
