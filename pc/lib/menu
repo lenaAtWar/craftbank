@@ -1,0 +1,81 @@
+function menu(list, x, y, left, right)
+	selectElement = nil
+	while true do
+		i = 1
+		for key, value in pairs(list) do
+			if selectElement == nil then
+				selectElement = key
+			end
+
+			term.setCursorPos(x, (y + i - 1))
+			term.clearLine()
+			if selectElement == key then
+				io.write(left .. value .. right)
+				selectElement = key
+			else
+				io.write(" " .. value)
+			end
+
+			i = i + 1
+		end
+
+		local event, button = os.pullEvent("key")
+		if button == 200 then
+			first = nil
+			prev = nil
+			last = nil
+			isSelected = false
+			for key, value in pairs(list) do
+				if first == nil then
+					first = key
+				end
+
+				last = key
+
+				if key == selectElement then
+					if prev ~= nil then
+						selectElement = prev
+						isSelected = true
+
+						break
+					end
+				end
+
+				prev = key
+			end
+
+			if isSelected == false then
+				selectElement = last
+			end
+		elseif button == 208 then
+			first = nil
+			nxt = false
+			last = nil
+			isSelected = false
+			for key, value in pairs(list) do
+				if first == nil then
+					first = key
+				end
+
+				last = key
+
+				if nxt == true then
+					selectElement = key
+					isSelected = true
+
+					break
+				end
+
+				if nxt == false and key == selectElement then
+ 					nxt = true
+				end
+			end
+
+			if isSelected == false then
+				selectElement = first
+			end
+		elseif button == 28 then
+			return selectElement
+		end
+	end
+end
