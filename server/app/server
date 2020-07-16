@@ -94,8 +94,8 @@ while true do
 				if transactions ~= nil then
 					sendData = {}
 					for key, value in pairs(transactions) do
-						sendData[key] = db.selectRow("transaction/" .. key)
-						sendData[key]["buyer"] = db.selectVar("users/" .. sendData[key]["buyer"] .. "/login")
+						sendData[value] = db.selectRow("transaction/" .. value)
+						sendData[value]["buyer"] = db.selectVar("users/" .. sendData[value]["buyer"] .. "/login")
 					end
 
 					response = prepareResponse("ok", "", sendData)
