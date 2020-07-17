@@ -33,6 +33,8 @@ DB:
 
 Bank actions:
 - deposit
+- bill
+  - callback
 
 Entities:
 - User
@@ -53,7 +55,8 @@ Entities:
     2 = BUY,
     3 = DEPOSIT,
     4 = SHOP,
-    5 = ONLINE_SHOP
+    5 = ONLINE_SHOP,
+    6 = BILL
   ]
   - amount
   - commission
@@ -61,14 +64,36 @@ Entities:
   - status [
     1 = SUCCESS,
     2 = ERROR,
-    3 = REFUND
+    3 = REFUND,
+    4 = TO_PAY
   ]
   - comment
 - Items
   - mine_id
   - name
+- Bill
+  - transaction_id
+  - callback
   
 # END CraftBank Server
+
+#DNS
+
+Entities:
+- dns
+  - name
+  - target
+  - number_of_requests
+  - bank_account
+  - is_active
+  - last_day
+- dns_requests
+  - client
+  - dns_name
+  - dns_id
+  - status
+
+#END DNS
 
 # OTHERS
 
@@ -78,7 +103,7 @@ Entities:
 - online shop
 - offline shop
 - amazon (storage & delivery)
-- 
+- tender
 
 Apps:
 - http-server
