@@ -77,7 +77,7 @@ Entities:
   
 # END CraftBank Server
 
-#DNS
+# DNS
 
 Entities:
 - dns
@@ -93,7 +93,7 @@ Entities:
   - dns_id
   - status
 
-#END DNS
+# END DNS
 
 # OTHERS
 
